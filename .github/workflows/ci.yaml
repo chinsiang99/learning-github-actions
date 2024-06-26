@@ -45,11 +45,23 @@ jobs:
 
     - name: Run Docker container
       run: docker run -d -p 5050:5050 learning-cicd-node
-      
+
     - name: Wait for the service to be up
       run: |
         echo "Waiting for the container to be up..."
         sleep 20
+
+    - name: Check Docker container status
+      run: docker ps -a
+
+    - name: Print Docker container logs
+      run: |
+        CONTAINER_ID=$(docker ps -q -f "ancestor=learning-cicd-node")
+        if [ -z "$CONTAINER_ID" ]; then
+          echo "No container found for the image learning-cicd-node"
+          exit 1
+        fi
+        docker logs $CONTAINER_ID
 
     - name: Test application
       run: |
