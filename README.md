@@ -49,3 +49,7 @@ A repository for me to learn more about basic concepts and **CI/CD Pipeline** wi
 
 ## example of common workflow
 - commit code -> test -> build -> push -> deploy
+
+# Where does the workflow run?
+- it is managed by GitHub (BUT we can also host our own one)
+- **each job** in a workflow **runs in a fresh** virtual environment
