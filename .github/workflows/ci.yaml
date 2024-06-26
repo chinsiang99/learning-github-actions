@@ -49,7 +49,7 @@ jobs:
     - name: Test application
       run: |
         sleep 10 # wait for the container to be fully up
-        curl -f http://localhost:3000 || curl -f http://localhost:3000/about || exit 1
+        curl -f http://localhost:5050 || curl -f http://localhost:5050/about || exit 1
 
     # - run: npm ci
     # - run: npm run build --if-present
