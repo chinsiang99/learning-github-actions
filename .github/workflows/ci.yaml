@@ -44,6 +44,7 @@ jobs:
       run: docker build -t learning-cicd-node .
 
     - name: Run Docker container
+      id: running-container
       run: docker run -d -p 5050:5050 learning-cicd-node
 
     - name: Wait for the service to be up
