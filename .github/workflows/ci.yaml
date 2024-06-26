@@ -20,12 +20,37 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Cache Docker layers
+      uses: actions/cache@v3
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    # - name: Use Node.js ${{ matrix.node-version }}
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+    #     cache: 'npm'
+
+    - name: Build Docker image
+      run: docker build -t learning-cicd-node .
+
+    - name: Run Docker container
+      run: docker run -d -p 5050:5050 learning-cicd-node
+
+    - name: Test application
+      run: |
+        sleep 10 # wait for the container to be fully up
+        curl -f http://localhost:3000 || curl -f http://localhost:3000/about || exit 1
+
+    # - run: npm ci
+    # - run: npm run build --if-present
+    # - run: npm test
