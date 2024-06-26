@@ -45,11 +45,17 @@ jobs:
 
     - name: Run Docker container
       run: docker run -d -p 5050:5050 learning-cicd-node
+      
+    - name: Wait for the service to be up
+      run: |
+        echo "Waiting for the container to be up..."
+        sleep 20
 
     - name: Test application
       run: |
-        sleep 10 # wait for the container to be fully up
-        curl -f http://localhost:5050 || curl -f http://localhost:5050/about || exit 1
+        echo "Testing application endpoints"
+        curl -f http://localhost:5050 || exit 1
+        curl -f http://localhost:5050/about || exit 1
 
     # - run: npm ci
     # - run: npm run build --if-present
